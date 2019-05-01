@@ -1,0 +1,358 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		6C2CD5852279DE3E00216953 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C2CD5842279DE3E00216953 /* AppDelegate.m */; };
+		6C2CD5882279DE3E00216953 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C2CD5872279DE3E00216953 /* ViewController.m */; };
+		6C2CD58B2279DE3E00216953 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6C2CD5892279DE3E00216953 /* Main.storyboard */; };
+		6C2CD58E2279DE3E00216953 /* FancyFence.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6C2CD58C2279DE3E00216953 /* FancyFence.xcdatamodeld */; };
+		6C2CD5902279DE3F00216953 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6C2CD58F2279DE3F00216953 /* Assets.xcassets */; };
+		6C2CD5932279DE3F00216953 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6C2CD5912279DE3F00216953 /* LaunchScreen.storyboard */; };
+		6C2CD5962279DE3F00216953 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C2CD5952279DE3F00216953 /* main.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		6C2CD5802279DE3E00216953 /* FancyFence.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FancyFence.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6C2CD5832279DE3E00216953 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		6C2CD5842279DE3E00216953 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		6C2CD5862279DE3E00216953 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		6C2CD5872279DE3E00216953 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		6C2CD58A2279DE3E00216953 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		6C2CD58D2279DE3E00216953 /* FancyFence.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FancyFence.xcdatamodel; sourceTree = "<group>"; };
+		6C2CD58F2279DE3F00216953 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		6C2CD5922279DE3F00216953 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		6C2CD5942279DE3F00216953 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6C2CD5952279DE3F00216953 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		6C2CD57D2279DE3E00216953 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		6C2CD5772279DE3D00216953 = {
+			isa = PBXGroup;
+			children = (
+				6C2CD5822279DE3E00216953 /* FancyFence */,
+				6C2CD5812279DE3E00216953 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		6C2CD5812279DE3E00216953 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6C2CD5802279DE3E00216953 /* FancyFence.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		6C2CD5822279DE3E00216953 /* FancyFence */ = {
+			isa = PBXGroup;
+			children = (
+				6C2CD5832279DE3E00216953 /* AppDelegate.h */,
+				6C2CD5842279DE3E00216953 /* AppDelegate.m */,
+				6C2CD5862279DE3E00216953 /* ViewController.h */,
+				6C2CD5872279DE3E00216953 /* ViewController.m */,
+				6C2CD5892279DE3E00216953 /* Main.storyboard */,
+				6C2CD58F2279DE3F00216953 /* Assets.xcassets */,
+				6C2CD5912279DE3F00216953 /* LaunchScreen.storyboard */,
+				6C2CD5942279DE3F00216953 /* Info.plist */,
+				6C2CD5952279DE3F00216953 /* main.m */,
+				6C2CD58C2279DE3E00216953 /* FancyFence.xcdatamodeld */,
+			);
+			path = FancyFence;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		6C2CD57F2279DE3E00216953 /* FancyFence */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6C2CD5992279DE3F00216953 /* Build configuration list for PBXNativeTarget "FancyFence" */;
+			buildPhases = (
+				6C2CD57C2279DE3E00216953 /* Sources */,
+				6C2CD57D2279DE3E00216953 /* Frameworks */,
+				6C2CD57E2279DE3E00216953 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FancyFence;
+			productName = FancyFence;
+			productReference = 6C2CD5802279DE3E00216953 /* FancyFence.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		6C2CD5782279DE3D00216953 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1010;
+				TargetAttributes = {
+					6C2CD57F2279DE3E00216953 = {
+						CreatedOnToolsVersion = 10.1;
+					};
+				};
+			};
+			buildConfigurationList = 6C2CD57B2279DE3D00216953 /* Build configuration list for PBXProject "FancyFence" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 6C2CD5772279DE3D00216953;
+			productRefGroup = 6C2CD5812279DE3E00216953 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				6C2CD57F2279DE3E00216953 /* FancyFence */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		6C2CD57E2279DE3E00216953 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6C2CD5932279DE3F00216953 /* LaunchScreen.storyboard in Resources */,
+				6C2CD5902279DE3F00216953 /* Assets.xcassets in Resources */,
+				6C2CD58B2279DE3E00216953 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		6C2CD57C2279DE3E00216953 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6C2CD5882279DE3E00216953 /* ViewController.m in Sources */,
+				6C2CD5852279DE3E00216953 /* AppDelegate.m in Sources */,
+				6C2CD5962279DE3F00216953 /* main.m in Sources */,
+				6C2CD58E2279DE3E00216953 /* FancyFence.xcdatamodeld in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		6C2CD5892279DE3E00216953 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6C2CD58A2279DE3E00216953 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		6C2CD5912279DE3F00216953 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6C2CD5922279DE3F00216953 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		6C2CD5972279DE3F00216953 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		6C2CD5982279DE3F00216953 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		6C2CD59A2279DE3F00216953 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = GNJ3M3D2JQ;
+				INFOPLIST_FILE = FancyFence/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = pole.FancyFence;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		6C2CD59B2279DE3F00216953 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = GNJ3M3D2JQ;
+				INFOPLIST_FILE = FancyFence/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = pole.FancyFence;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		6C2CD57B2279DE3D00216953 /* Build configuration list for PBXProject "FancyFence" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6C2CD5972279DE3F00216953 /* Debug */,
+				6C2CD5982279DE3F00216953 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6C2CD5992279DE3F00216953 /* Build configuration list for PBXNativeTarget "FancyFence" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6C2CD59A2279DE3F00216953 /* Debug */,
+				6C2CD59B2279DE3F00216953 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		6C2CD58C2279DE3E00216953 /* FancyFence.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				6C2CD58D2279DE3E00216953 /* FancyFence.xcdatamodel */,
+			);
+			currentVersion = 6C2CD58D2279DE3E00216953 /* FancyFence.xcdatamodel */;
+			path = FancyFence.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = 6C2CD5782279DE3D00216953 /* Project object */;
+}
