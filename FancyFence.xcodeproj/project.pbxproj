@@ -14,6 +14,9 @@
 		6C2CD5902279DE3F00216953 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6C2CD58F2279DE3F00216953 /* Assets.xcassets */; };
 		6C2CD5932279DE3F00216953 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6C2CD5912279DE3F00216953 /* LaunchScreen.storyboard */; };
 		6C2CD5962279DE3F00216953 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C2CD5952279DE3F00216953 /* main.m */; };
+		6C2CD5A02279EA0100216953 /* AddViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C2CD59F2279EA0100216953 /* AddViewController.m */; };
+		6C923D25227B34C700360EF6 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6C923D23227B34C700360EF6 /* Model.xcdatamodeld */; };
+		6CB55F51227A041000E4F2E1 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CB55F50227A041000E4F2E1 /* CoreLocation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +31,10 @@
 		6C2CD5922279DE3F00216953 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6C2CD5942279DE3F00216953 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6C2CD5952279DE3F00216953 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		6C2CD59E2279EA0100216953 /* AddViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AddViewController.h; sourceTree = "<group>"; };
+		6C2CD59F2279EA0100216953 /* AddViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AddViewController.m; sourceTree = "<group>"; };
+		6C923D24227B34C700360EF6 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		6CB55F50227A041000E4F2E1 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -35,6 +42,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6CB55F51227A041000E4F2E1 /* CoreLocation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -46,6 +54,7 @@
 			children = (
 				6C2CD5822279DE3E00216953 /* FancyFence */,
 				6C2CD5812279DE3E00216953 /* Products */,
+				6CB55F4F227A041000E4F2E1 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -65,13 +74,24 @@
 				6C2CD5862279DE3E00216953 /* ViewController.h */,
 				6C2CD5872279DE3E00216953 /* ViewController.m */,
 				6C2CD5892279DE3E00216953 /* Main.storyboard */,
+				6C923D23227B34C700360EF6 /* Model.xcdatamodeld */,
 				6C2CD58F2279DE3F00216953 /* Assets.xcassets */,
 				6C2CD5912279DE3F00216953 /* LaunchScreen.storyboard */,
 				6C2CD5942279DE3F00216953 /* Info.plist */,
 				6C2CD5952279DE3F00216953 /* main.m */,
 				6C2CD58C2279DE3E00216953 /* FancyFence.xcdatamodeld */,
+				6C2CD59E2279EA0100216953 /* AddViewController.h */,
+				6C2CD59F2279EA0100216953 /* AddViewController.m */,
 			);
 			path = FancyFence;
+			sourceTree = "<group>";
+		};
+		6CB55F4F227A041000E4F2E1 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				6CB55F50227A041000E4F2E1 /* CoreLocation.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -143,8 +163,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6C2CD5A02279EA0100216953 /* AddViewController.m in Sources */,
 				6C2CD5882279DE3E00216953 /* ViewController.m in Sources */,
 				6C2CD5852279DE3E00216953 /* AppDelegate.m in Sources */,
+				6C923D25227B34C700360EF6 /* Model.xcdatamodeld in Sources */,
 				6C2CD5962279DE3F00216953 /* main.m in Sources */,
 				6C2CD58E2279DE3E00216953 /* FancyFence.xcdatamodeld in Sources */,
 			);
@@ -349,6 +371,16 @@
 			);
 			currentVersion = 6C2CD58D2279DE3E00216953 /* FancyFence.xcdatamodel */;
 			path = FancyFence.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+		6C923D23227B34C700360EF6 /* Model.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				6C923D24227B34C700360EF6 /* Model.xcdatamodel */,
+			);
+			currentVersion = 6C923D24227B34C700360EF6 /* Model.xcdatamodel */;
+			path = Model.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};

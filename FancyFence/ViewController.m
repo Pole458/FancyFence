@@ -6,8 +6,12 @@
 //
 
 #import "ViewController.h"
+#import <CoreData/CoreData.h>
+#import "AppDelegate.h"
 
 @interface ViewController ()
+
+@property (strong) NSMutableArray *fences;
 
 @end
 
@@ -15,8 +19,30 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
+
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+  
+    // Fetch the fences from persistent data store
+    AppDelegate *objAppDel = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+    NSManagedObjectContext *context = [objAppDel managedObjectContext];
+
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Fence"];
+    self.fences = [[context executeFetchRequest:fetchRequest error:nil] mutableCopy];
+
+    for (NSManagedObject *fence in self.fences) {
+
+        MKPointAnnotation *point = [[MKPointAnnotation alloc] init];
+
+        point.title = [fence valueForKey:@"uponEntry"];
+        point.subtitle = [fence valueForKey:@"uponExit"];
+        point.coordinate = CLLocationCoordinate2DMake([[fence valueForKey:@"latitude"] doubleValue], [[fence valueForKey:@"longitude"] doubleValue]);
+
+        [self.mapView addAnnotation:point];
+    }
+}
 
 @end
+
