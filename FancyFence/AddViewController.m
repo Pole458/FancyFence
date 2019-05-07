@@ -19,8 +19,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
     
+    //Set received map region
+    self.mapView.region = self.userCoordinate;
+  
     // Register for keyboard notifications
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWasShown:)
@@ -62,24 +64,8 @@
 
 - (IBAction)save:(id)sender {
     
-    AppDelegate *objAppDel = (AppDelegate *)[[UIApplication sharedApplication]delegate];
-    NSManagedObjectContext *context = [objAppDel managedObjectContext];
+    [self.delegate addFenceWithMessage:self.messageTextField.text Range:[NSNumber numberWithInt:[self.rangeTextField.text intValue]] Type:[NSNumber numberWithBool:!self.typeSegControl.selectedSegmentIndex] Lat:[NSNumber numberWithDouble:self.mapView.centerCoordinate.latitude] Lon:[NSNumber numberWithDouble:self.mapView.centerCoordinate.longitude]];
     
-    // Create a new managed object
-    NSManagedObject *newFence = [NSEntityDescription insertNewObjectForEntityForName:@"Fence" inManagedObjectContext:context];
-    
-    [newFence setValue:[NSNumber numberWithDouble:self.mapView.centerCoordinate.latitude] forKey:@"latitude"];
-    [newFence setValue:[NSNumber numberWithDouble:self.mapView.centerCoordinate.longitude] forKey:@"longitude"];
-    [newFence setValue:[NSNumber numberWithInt:[self.rangeTextField.text intValue]] forKey:@"range"];
-    [newFence setValue:self.entryTextField.text forKey:@"uponEntry"];
-    [newFence setValue:self.exitTextField.text forKey:@"uponExit"];
-    
-    NSError *error = nil;
-    // Save the object to persistent store
-    if (![context save:&error]) {
-        NSLog(@"Can't Save! %@ %@", error, [error localizedDescription]);
-    }
-  
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -119,7 +105,6 @@
 {
     self.activeField = nil;
 }
-
 
 /*
 #pragma mark - Navigation

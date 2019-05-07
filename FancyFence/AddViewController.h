@@ -10,13 +10,19 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@protocol AddFenceViewControllerDelegate
+- (void)addFenceWithMessage:(NSString*)message Range:(NSNumber*)range Type:(NSNumber*)type Lat:(NSNumber*)lat Lon:(NSNumber*)lon;
+@end
+
 @interface AddViewController : UIViewController
 
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property (weak, nonatomic) IBOutlet UITextField *rangeTextField;
-@property (weak, nonatomic) IBOutlet UITextField *entryTextField;
-@property (weak, nonatomic) IBOutlet UITextField *exitTextField;
+@property (weak, nonatomic) IBOutlet UITextField *messageTextField;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *typeSegControl;
+@property (nonatomic, retain) id delegate;
+@property (nonatomic) MKCoordinateRegion userCoordinate;
 
 -(IBAction)cancel:(id)sender;
 -(IBAction)save:(id)sender;

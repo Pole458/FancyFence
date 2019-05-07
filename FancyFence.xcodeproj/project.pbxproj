@@ -53,7 +53,6 @@
 			isa = PBXGroup;
 			children = (
 				6C2CD5822279DE3E00216953 /* FancyFence */,
-				6C2CD5812279DE3E00216953 /* Products */,
 				6CB55F4F227A041000E4F2E1 /* Frameworks */,
 			);
 			sourceTree = "<group>";
@@ -64,6 +63,7 @@
 				6C2CD5802279DE3E00216953 /* FancyFence.app */,
 			);
 			name = Products;
+			path = ..;
 			sourceTree = "<group>";
 		};
 		6C2CD5822279DE3E00216953 /* FancyFence */ = {
@@ -82,6 +82,7 @@
 				6C2CD58C2279DE3E00216953 /* FancyFence.xcdatamodeld */,
 				6C2CD59E2279EA0100216953 /* AddViewController.h */,
 				6C2CD59F2279EA0100216953 /* AddViewController.m */,
+				6C2CD5812279DE3E00216953 /* Products */,
 			);
 			path = FancyFence;
 			sourceTree = "<group>";
