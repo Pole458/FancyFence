@@ -8,6 +8,7 @@
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
 #import "AddViewController.h"
+#import "FenceAnnotation.h"
 
 @interface ViewController : UIViewController <CLLocationManagerDelegate, MKMapViewDelegate, AddFenceViewControllerDelegate>
 

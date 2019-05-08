@@ -62,12 +62,35 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="yoT-ng-Haj">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="403"/>
                                         <subviews>
-                                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="oBs-wT-Tzc">
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="luW-p9-24D">
                                                 <rect key="frame" x="0.0" y="0.0" width="375" height="255"/>
+                                                <subviews>
+                                                    <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="oBs-wT-Tzc">
+                                                        <rect key="frame" x="0.0" y="0.0" width="375" height="255"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="255" id="0aA-o6-9gq"/>
+                                                        </constraints>
+                                                    </mapView>
+                                                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="AddPin" translatesAutoresizingMaskIntoConstraints="NO" id="DdX-G0-xQM">
+                                                        <rect key="frame" x="150" y="90" width="75" height="75"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="75" id="Avw-Zs-550"/>
+                                                            <constraint firstAttribute="height" constant="75" id="MF3-mE-C5W"/>
+                                                        </constraints>
+                                                    </imageView>
+                                                </subviews>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="255" id="0aA-o6-9gq"/>
+                                                    <constraint firstItem="oBs-wT-Tzc" firstAttribute="top" secondItem="luW-p9-24D" secondAttribute="top" id="BKB-tz-WyZ"/>
+                                                    <constraint firstItem="DdX-G0-xQM" firstAttribute="centerY" secondItem="luW-p9-24D" secondAttribute="centerY" id="T6E-gj-458"/>
+                                                    <constraint firstAttribute="height" constant="255" id="Tjm-uw-YXW"/>
+                                                    <constraint firstItem="oBs-wT-Tzc" firstAttribute="leading" secondItem="luW-p9-24D" secondAttribute="leading" id="Vvf-05-v62"/>
+                                                    <constraint firstAttribute="trailing" secondItem="oBs-wT-Tzc" secondAttribute="trailing" id="dQv-W0-1AQ"/>
+                                                    <constraint firstItem="DdX-G0-xQM" firstAttribute="centerX" secondItem="luW-p9-24D" secondAttribute="centerX" id="kr0-He-79o"/>
+                                                    <constraint firstAttribute="bottom" secondItem="oBs-wT-Tzc" secondAttribute="bottom" id="o2M-hm-XWF"/>
+                                                    <constraint firstItem="oBs-wT-Tzc" firstAttribute="centerX" secondItem="luW-p9-24D" secondAttribute="centerX" id="ufo-Q4-7mB"/>
                                                 </constraints>
-                                            </mapView>
+                                            </view>
                                             <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="U9m-Gp-tw0">
                                                 <rect key="frame" x="8" y="275" width="359" height="28"/>
                                                 <subviews>
@@ -139,14 +162,16 @@
                                             </stackView>
                                         </subviews>
                                         <constraints>
+                                            <constraint firstItem="luW-p9-24D" firstAttribute="centerX" secondItem="yoT-ng-Haj" secondAttribute="centerX" id="3G4-lg-uw9"/>
                                             <constraint firstItem="c7P-zK-4xR" firstAttribute="leading" secondItem="yoT-ng-Haj" secondAttribute="leading" constant="8" id="OaH-63-x0b"/>
                                             <constraint firstItem="U9m-Gp-tw0" firstAttribute="leading" secondItem="yoT-ng-Haj" secondAttribute="leading" constant="8" id="RfF-CL-c2Z"/>
                                             <constraint firstAttribute="trailing" secondItem="c7P-zK-4xR" secondAttribute="trailing" constant="8" id="SqJ-Ni-YVp"/>
+                                            <constraint firstItem="luW-p9-24D" firstAttribute="top" secondItem="yoT-ng-Haj" secondAttribute="top" id="Xl8-4z-4gZ"/>
                                             <constraint firstAttribute="trailing" secondItem="U9m-Gp-tw0" secondAttribute="trailing" constant="8" id="aR1-TU-PP6"/>
-                                            <constraint firstAttribute="trailing" secondItem="oBs-wT-Tzc" secondAttribute="trailing" id="kr5-EJ-W7C"/>
+                                            <constraint firstItem="luW-p9-24D" firstAttribute="leading" secondItem="yoT-ng-Haj" secondAttribute="leading" id="c3c-k1-33I"/>
+                                            <constraint firstAttribute="trailing" secondItem="luW-p9-24D" secondAttribute="trailing" id="j6K-ra-pvc"/>
                                             <constraint firstAttribute="trailing" secondItem="yYe-WP-Juj" secondAttribute="trailing" constant="8" id="ohP-sw-4jl"/>
                                             <constraint firstItem="yYe-WP-Juj" firstAttribute="leading" secondItem="yoT-ng-Haj" secondAttribute="leading" constant="8" id="wRr-lF-A4v"/>
-                                            <constraint firstItem="oBs-wT-Tzc" firstAttribute="leading" secondItem="yoT-ng-Haj" secondAttribute="leading" id="xPZ-Sw-cuU"/>
                                         </constraints>
                                     </stackView>
                                 </subviews>
@@ -190,7 +215,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0PL-tv-ftI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2338" y="-564"/>
+            <point key="canvasLocation" x="2336.8000000000002" y="-564.46776611694156"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="AZA-Ym-r9o">
@@ -229,4 +254,7 @@
             <point key="canvasLocation" x="1628" y="-564"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="AddPin" width="75" height="75"/>
+    </resources>
 </document>

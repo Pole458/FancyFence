@@ -22,6 +22,7 @@
     
     //Set received map region
     self.mapView.region = self.userCoordinate;
+    self.mapView.showsUserLocation = YES;
   
     // Register for keyboard notifications
     [[NSNotificationCenter defaultCenter] addObserver:self
