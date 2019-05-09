@@ -13,6 +13,7 @@
 @interface ViewController : UIViewController <CLLocationManagerDelegate, MKMapViewDelegate, AddFenceViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *addButton;
 
 @end
 

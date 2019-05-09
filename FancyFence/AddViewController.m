@@ -12,6 +12,7 @@
 @interface AddViewController ()
 
 @property UIView *activeField;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *saveButton;
 
 @end
 
@@ -32,6 +33,11 @@
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillBeHidden:)
                                                  name:UIKeyboardWillHideNotification object:nil];
+    
+}
+
+- (void)textFieldDidChange {
+    
 }
 
 - (IBAction)closeKeyboard:(id)sender {
@@ -43,7 +49,8 @@
 }
 
 - (IBAction)save:(id)sender {
-    [self.delegate addFenceWithMessage:self.messageTextField.text Range:[NSNumber numberWithInt:[self.rangeTextField.text intValue]] Type:[NSNumber numberWithBool:!self.typeSegControl.selectedSegmentIndex] Lat:[NSNumber numberWithDouble:self.mapView.centerCoordinate.latitude] Lon:[NSNumber numberWithDouble:self.mapView.centerCoordinate.longitude]]; 
+    
+    [self.delegate addFenceWithMessage:self.messageTextField.text Range:[NSNumber numberWithInt:[self.rangeTextField.text intValue]] Type:[NSNumber numberWithBool:!self.typeSegControl.selectedSegmentIndex] Lat:[NSNumber numberWithDouble:self.mapView.centerCoordinate.latitude] Lon:[NSNumber numberWithDouble:self.mapView.centerCoordinate.longitude]];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -78,6 +85,10 @@
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
     self.activeField = nil;
+}
+
+- (IBAction)textFieldChanged:(id)sender {
+    [self.saveButton setEnabled:![self.messageTextField.text isEqual: @""] && ![self.rangeTextField.text isEqual: @""]];
 }
 
 @end

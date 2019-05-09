@@ -11,7 +11,10 @@
 
 @interface ViewController ()
 
+@property (nonatomic, strong) AppDelegate *appDelegate;
 @property (nonatomic, strong) CLLocationManager *locationManager;
+@property (nonatomic) int fenceCount;
+@property bool alreadyCentered;
 
 @end
 
@@ -24,29 +27,41 @@
     self.mapView.delegate = self;
   
     // Setup locationManager
-    self.locationManager = [[CLLocationManager alloc] init];
     self.locationManager.delegate = self;
-    [self.locationManager requestAlwaysAuthorization];
     
     [self loadAllFences];
+    
+    self.alreadyCentered = NO;
+    
+}
+
+- (CLLocationManager *)locationManager{
+    // Lazy loading location manager
+    if(!_locationManager) _locationManager = [[CLLocationManager alloc] init];
+    return _locationManager;
 }
 
 - (void)loadAllFences {
     // Fetch the fences from persistent data store
-    AppDelegate *objAppDel = (AppDelegate *)[[UIApplication sharedApplication]delegate];
-    NSManagedObjectContext *context = [objAppDel managedObjectContext];
+    NSManagedObjectContext *context = [self.appDelegate managedObjectContext];
     
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Fence"];
+    NSArray *fences = [[context executeFetchRequest:fetchRequest error:nil] mutableCopy];
     
-    for (NSManagedObject *fence in [[context executeFetchRequest:fetchRequest error:nil] mutableCopy]) {
+    for (NSManagedObject *fence in fences) {
         [self addFenceAnnotation:[[FenceAnnotation alloc] initWithFence:fence]];
     }
 }
 
-- (CLLocationManager *)locationManager{
-	// Lazy loading location manager
-    if(!_locationManager) _locationManager = [[CLLocationManager alloc] init];
-    return _locationManager;
+- (AppDelegate*)appDelegate {
+    // Lazy loading app delegate
+    if(!_appDelegate) _appDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+    return _appDelegate;
+}
+
+- (void)setFenceCount:(int)fenceCount {
+    _fenceCount = fenceCount;
+    [self.addButton setEnabled: _fenceCount < 20];
 }
 
 #pragma mark - Navigation
@@ -72,14 +87,10 @@
 #pragma mark - MapView Delegate
 
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
-	// Center the map to user position when it gets updated
-	
-    MKCoordinateRegion mapRegion;
-    mapRegion.center = mapView.userLocation.coordinate;
-    mapRegion.span.latitudeDelta = 0.2;
-    mapRegion.span.longitudeDelta = 0.2;
-    
-    [mapView setRegion:mapRegion animated: YES];
+    if(!self.alreadyCentered) {
+        [self centerUserLocation];
+        self.alreadyCentered = YES;
+    }
 }
 
 - (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control {
@@ -121,14 +132,13 @@
     return [[MKOverlayRenderer alloc] initWithOverlay:overlay];
 }
 
-#pragma mark Functions that update model and view
+#pragma mark - Functions that update model and view
 
 - (void)addFenceAnnotation:(FenceAnnotation*)annotation {
 	// Add fence to the model
     [self.mapView addAnnotation:annotation];
     [self addRadiusOverlayForFenceAnnotation:annotation];
-	[self startMonitoring:annotation.fence];
-    [self updateFenceCount];
+    self.fenceCount++;
 }
 
 - (void)removeFenceAnnotation:(FenceAnnotation*)annotation {
@@ -136,10 +146,9 @@
     [self.mapView removeAnnotation:annotation];
     [self removeRadiusOverlayforFenceAnnotation:annotation];
 	[self stopMonitoringFence:annotation.fence];
-    [self updateFenceCount];
+    self.fenceCount--;
     
-    AppDelegate *objAppDel = (AppDelegate *)[[UIApplication sharedApplication]delegate];
-    NSManagedObjectContext *context = [objAppDel managedObjectContext];
+    NSManagedObjectContext *context = [self.appDelegate managedObjectContext];
     [context deleteObject: annotation.fence];
     NSError *error = nil;
     if (![context save:&error]) {
@@ -163,13 +172,16 @@
     }
 }
 
-- (void)updateFenceCount {
-	//TODO
-//    title = "Geotifications: \(geotifications.count)"
-//    navigationItem.rightBarButtonItem?.isEnabled = (geotifications.count < 20)
-}
-
 - (void)startMonitoring:(NSManagedObject *)fence {
+    
+    if(![CLLocationManager isMonitoringAvailableForClass:[CLCircularRegion class]]) {
+        NSLog(@"Geofencing not supported on this device!");
+        return;
+    }
+   
+    if( CLLocationManager.authorizationStatus != kCLAuthorizationStatusAuthorizedAlways) {
+        NSLog(@"Your geotification is saved but will only be activated once you grant Geotify permission to access the device location.");
+    }
     
     CLCircularRegion *region = [self convert:fence];
     [self.locationManager startMonitoringForRegion:region];
@@ -199,28 +211,37 @@
 
 - (void)addFenceWithMessage:(NSString *)message Range:(NSNumber *)range Type:(NSNumber *)type Lat:(NSNumber *)lat Lon:(NSNumber *)lon {
     
-    AppDelegate *objAppDel = (AppDelegate *)[[UIApplication sharedApplication]delegate];
-    NSManagedObjectContext *context = [objAppDel managedObjectContext];
+    //Check max radius
+    NSNumber *maxRange = [NSNumber numberWithDouble:self.locationManager.maximumRegionMonitoringDistance];
+    NSComparisonResult result = [range compare:maxRange];
+    range = (result == NSOrderedDescending) ? maxRange : range;
     
-    // Create a new managed object
-    NSManagedObject *newFence = [NSEntityDescription insertNewObjectForEntityForName:@"Fence" inManagedObjectContext:context];
+    // Create annotation and add it to the NSManagedObjectContext
+    FenceAnnotation *annotation = [[FenceAnnotation alloc] initWithMessage:message Range:range Type:type Lat:lat Lon:lon WithContext:self.appDelegate.managedObjectContext];
     
-    [newFence setValue:lat forKey:@"latitude"];
-    [newFence setValue:lon forKey:@"longitude"];
-    [newFence setValue:range forKey:@"range"];	//clamp radius here
-    [newFence setValue:type forKey:@"uponEntry"];
-    [newFence setValue:message forKey:@"message"];
-    [newFence setValue:[[NSUUID UUID] UUIDString] forKey:@"identifier"];
-    
-    NSError *error = nil;
-    // Save the object to persistent store
-    if (![context save:&error]) {
-        NSLog(@"Can't Save! %@ %@", error, [error localizedDescription]);
-    }
-    
-    FenceAnnotation *annotation = [[FenceAnnotation alloc] initWithFence:newFence];
+    // Add annotation to the mapview
     [self addFenceAnnotation:annotation];
     
+    // Start monitoring
+    [self startMonitoring:annotation.fence];
+    
+}
+
+#pragma mark - UI
+
+- (IBAction)userLocationButton:(id)sender {
+    [self centerUserLocation];
+}
+
+- (void)centerUserLocation {
+    // Center the map to user position when it gets updated
+    
+    MKCoordinateRegion mapRegion;
+    mapRegion.center = self.mapView.userLocation.coordinate;
+    mapRegion.span.latitudeDelta = 0.2;
+    mapRegion.span.longitudeDelta = 0.2;
+    
+    [self.mapView setRegion:mapRegion animated: YES];
 }
 
 @end

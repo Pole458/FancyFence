@@ -33,6 +33,11 @@
                     </view>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" title="Fancy Fence" id="AkQ-6s-9DE">
+                        <barButtonItem key="leftBarButtonItem" image="CurrentLocation" id="m9x-8y-Btj">
+                            <connections>
+                                <action selector="userLocationButton:" destination="BYZ-38-t0r" id="Hya-33-EHW"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="Tg2-ul-rYs">
                             <connections>
                                 <segue destination="ZPe-gu-Zkq" kind="presentation" identifier="toAddFenceVC" id="jfg-pS-ANL"/>
@@ -41,6 +46,7 @@
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="addButton" destination="Tg2-ul-rYs" id="t4N-Ji-0Lm"/>
                         <outlet property="mapView" destination="BKG-LB-bB8" id="9dL-mm-9jR"/>
                     </connections>
                 </viewController>
@@ -132,6 +138,7 @@
                                                         <connections>
                                                             <action selector="closeKeyboard:" destination="OPR-oL-h1w" eventType="editingDidEndOnExit" id="d4v-XD-fIL"/>
                                                             <action selector="closeKeyboard:" destination="OPR-oL-h1w" eventType="editingDidEnd" id="miG-ly-Lxu"/>
+                                                            <action selector="textFieldChanged:" destination="OPR-oL-h1w" eventType="editingChanged" id="1D2-KA-dqG"/>
                                                         </connections>
                                                     </textField>
                                                 </subviews>
@@ -156,6 +163,7 @@
                                                         <connections>
                                                             <action selector="closeKeyboard:" destination="OPR-oL-h1w" eventType="primaryActionTriggered" id="ivd-0Z-uyw"/>
                                                             <action selector="closeKeyboard:" destination="OPR-oL-h1w" eventType="editingDidEndOnExit" id="k8i-E9-ifv"/>
+                                                            <action selector="textFieldChanged:" destination="OPR-oL-h1w" eventType="editingChanged" id="cFh-Ld-cbn"/>
                                                         </connections>
                                                     </textField>
                                                 </subviews>
@@ -199,7 +207,7 @@
                                 <action selector="cancel:" destination="OPR-oL-h1w" id="lKx-Dz-ikd"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="RDv-iC-0TC">
+                        <barButtonItem key="rightBarButtonItem" enabled="NO" systemItem="save" id="RDv-iC-0TC">
                             <connections>
                                 <action selector="save:" destination="OPR-oL-h1w" id="jeG-LH-zts"/>
                             </connections>
@@ -209,6 +217,7 @@
                         <outlet property="mapView" destination="oBs-wT-Tzc" id="IyP-cH-M0L"/>
                         <outlet property="messageTextField" destination="4wh-rJ-1a5" id="9wD-w5-Ytc"/>
                         <outlet property="rangeTextField" destination="jLW-90-gEU" id="89v-6M-D3b"/>
+                        <outlet property="saveButton" destination="RDv-iC-0TC" id="zXA-67-rBf"/>
                         <outlet property="scrollView" destination="972-oa-u1y" id="CwH-VE-BSc"/>
                         <outlet property="typeSegControl" destination="sh0-Dm-hpa" id="HNv-4s-2qc"/>
                     </connections>
@@ -256,5 +265,6 @@
     </scenes>
     <resources>
         <image name="AddPin" width="75" height="75"/>
+        <image name="CurrentLocation" width="15" height="15"/>
     </resources>
 </document>

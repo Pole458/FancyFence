@@ -19,6 +19,9 @@
 		6C95B4B32281E35E006125AF /* FenceAnnotation.h in Sources */ = {isa = PBXBuildFile; fileRef = 6C95B4B22281E176006125AF /* FenceAnnotation.h */; };
 		6C95B4B42281E35E006125AF /* FenceAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C95B4B12281E087006125AF /* FenceAnnotation.m */; };
 		6CB55F51227A041000E4F2E1 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CB55F50227A041000E4F2E1 /* CoreLocation.framework */; };
+		6CB7148222845EC4006ED473 /* Apple.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 6CB7148122845EC4006ED473 /* Apple.gpx */; };
+		6CB7148522845F04006ED473 /* Google.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 6CB7148422845F04006ED473 /* Google.gpx */; };
+		6CB7148722845F37006ED473 /* SimulatedLocations.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 6CB7148622845F37006ED473 /* SimulatedLocations.gpx */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,6 +42,9 @@
 		6C95B4B12281E087006125AF /* FenceAnnotation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FenceAnnotation.m; sourceTree = "<group>"; };
 		6C95B4B22281E176006125AF /* FenceAnnotation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FenceAnnotation.h; sourceTree = "<group>"; };
 		6CB55F50227A041000E4F2E1 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		6CB7148122845EC4006ED473 /* Apple.gpx */ = {isa = PBXFileReference; lastKnownFileType = text; path = Apple.gpx; sourceTree = "<group>"; };
+		6CB7148422845F04006ED473 /* Google.gpx */ = {isa = PBXFileReference; lastKnownFileType = text; path = Google.gpx; sourceTree = "<group>"; };
+		6CB7148622845F37006ED473 /* SimulatedLocations.gpx */ = {isa = PBXFileReference; lastKnownFileType = text; path = SimulatedLocations.gpx; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +94,7 @@
 				6C2CD59F2279EA0100216953 /* AddViewController.m */,
 				6C95B4B22281E176006125AF /* FenceAnnotation.h */,
 				6C95B4B12281E087006125AF /* FenceAnnotation.m */,
+				6CB7148322845EEB006ED473 /* Supporting Files */,
 				6C2CD5812279DE3E00216953 /* Products */,
 			);
 			path = FancyFence;
@@ -99,6 +106,16 @@
 				6CB55F50227A041000E4F2E1 /* CoreLocation.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		6CB7148322845EEB006ED473 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				6CB7148122845EC4006ED473 /* Apple.gpx */,
+				6CB7148422845F04006ED473 /* Google.gpx */,
+				6CB7148622845F37006ED473 /* SimulatedLocations.gpx */,
+			);
+			path = "Supporting Files";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -157,9 +174,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6CB7148222845EC4006ED473 /* Apple.gpx in Resources */,
 				6C2CD5932279DE3F00216953 /* LaunchScreen.storyboard in Resources */,
+				6CB7148522845F04006ED473 /* Google.gpx in Resources */,
 				6C2CD5902279DE3F00216953 /* Assets.xcassets in Resources */,
 				6C2CD58B2279DE3E00216953 /* Main.storyboard in Resources */,
+				6CB7148722845F37006ED473 /* SimulatedLocations.gpx in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

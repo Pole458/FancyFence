@@ -20,6 +20,9 @@
 
 -(id)initWithFence:(NSManagedObject*)fence;
 
+-(id)initWithMessage:(NSString *)message Range:(NSNumber *)range Type:(NSNumber *)type Lat:(NSNumber *)lat Lon:(NSNumber *)lon WithContext:(NSManagedObjectContext*)context;
+
+
 @end
 
 

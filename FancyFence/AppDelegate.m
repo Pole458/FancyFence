@@ -9,6 +9,8 @@
 
 @interface AppDelegate ()
 
+@property (nonatomic, strong) CLLocationManager *locationManager;
+
 @end
 
 @implementation AppDelegate
@@ -16,9 +18,11 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    self.locationManager.delegate = self;
+    [self.locationManager requestAlwaysAuthorization];
+    NSLog(@"app did finish launching");
     return YES;
 }
-
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -48,6 +52,25 @@
     [self saveContext];
 }
 
+- (CLLocationManager *)locationManager{
+    // Lazy loading location manager
+    if(!_locationManager) _locationManager = [[CLLocationManager alloc] init];
+    return _locationManager;
+}
+
+#pragma mark - CoreLocationManager Delegate
+
+-(void)locationManager:(CLLocationManager *)manager didEnterRegion:(CLRegion *)region {
+    [self handleEventForRegion:region];
+}
+
+- (void)locationManager:(CLLocationManager *)manager didExitRegion:(CLRegion *)region {
+    [self handleEventForRegion:region];
+}
+
+- (void)handleEventForRegion:(CLRegion*)region {
+    NSLog(@"Region!");
+}
 
 #pragma mark - Core Data stack
 
