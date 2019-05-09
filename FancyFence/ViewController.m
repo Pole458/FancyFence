@@ -20,6 +20,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+	//Set mapview delegate
     self.mapView.delegate = self;
   
     // Setup locationManager
@@ -28,7 +29,6 @@
     [self.locationManager requestAlwaysAuthorization];
     
     [self loadAllFences];
-
 }
 
 - (void)loadAllFences {
@@ -43,36 +43,14 @@
     }
 }
 
-- (void)addFenceAnnotation:(FenceAnnotation*)annotation {
-    [self.mapView addAnnotation:annotation];
-    [self addRadiusOverlayForFenceAnnotation:annotation];
-    [self updateFenceCount];
-}
-
-- (void)removeFenceAnnotation:(FenceAnnotation*)annotation {
-    
-    [self.mapView removeAnnotation:annotation];
-    [self removeRadiusOverlayforFenceAnnotation:annotation];
-    [self updateFenceCount];
-    
-    AppDelegate *objAppDel = (AppDelegate *)[[UIApplication sharedApplication]delegate];
-    NSManagedObjectContext *context = [objAppDel managedObjectContext];
-    [context deleteObject: annotation.fence];
-    NSError *error = nil;
-    if (![context save:&error]) {
-        NSLog(@"Couldn't save: %@", error);
-    }
-}
-
-// Lazy loading location manager
 - (CLLocationManager *)locationManager{
+	// Lazy loading location manager
     if(!_locationManager) _locationManager = [[CLLocationManager alloc] init];
     return _locationManager;
 }
 
 #pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     
     if ([segue.identifier isEqualToString:@"toAddFenceVC"]) {
@@ -85,8 +63,17 @@
     }
 }
 
+#pragma mark - LocationManager Delegate
+
+- (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
+    self.mapView.showsUserLocation = (status == kCLAuthorizationStatusAuthorizedAlways);
+}
+
 #pragma mark - MapView Delegate
+
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
+	// Center the map to user position when it gets updated
+	
     MKCoordinateRegion mapRegion;
     mapRegion.center = mapView.userLocation.coordinate;
     mapRegion.span.latitudeDelta = 0.2;
@@ -95,12 +82,13 @@
     [mapView setRegion:mapRegion animated: YES];
 }
 
-- (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
-    self.mapView.showsUserLocation = (status == kCLAuthorizationStatusAuthorizedAlways);
+- (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control {
+	// Remove annotation when user taps delete button
+    FenceAnnotation *annotation = view.annotation;
+    [self removeFenceAnnotation:annotation];
 }
 
-- (MKAnnotationView *)mapView:(MKMapView *)mapView
-            viewForAnnotation:(id<MKAnnotation>)annotation {
+- (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
 
     NSString *identifier = @"fence";
     if ([annotation isKindOfClass:[FenceAnnotation class]]) {
@@ -122,6 +110,7 @@
 
 - (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay {
    
+	// Renders overlay for FenceAnnotation
     if([overlay isKindOfClass:[MKCircle class]]) {
         MKCircleRenderer *circleRenderer = [[MKCircleRenderer alloc] initWithOverlay:overlay];
         circleRenderer.lineWidth = 1.0;
@@ -132,61 +121,52 @@
     return [[MKOverlayRenderer alloc] initWithOverlay:overlay];
 }
 
-- (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control {
-    FenceAnnotation *annotation = view.annotation;
-    [self removeFenceAnnotation:annotation];
+#pragma mark Functions that update model and view
+
+- (void)addFenceAnnotation:(FenceAnnotation*)annotation {
+	// Add fence to the model
+    [self.mapView addAnnotation:annotation];
+    [self addRadiusOverlayForFenceAnnotation:annotation];
+	[self startMonitoring:annotation.fence];
+    [self updateFenceCount];
 }
 
-#pragma mark Functions that update the model/associated views with fence changes
-
-- (void)addFenceWithMessage:(NSString *)message Range:(NSNumber *)range Type:(NSNumber *)type Lat:(NSNumber *)lat Lon:(NSNumber *)lon {
+- (void)removeFenceAnnotation:(FenceAnnotation*)annotation {
+    // Remove fence from the model
+    [self.mapView removeAnnotation:annotation];
+    [self removeRadiusOverlayforFenceAnnotation:annotation];
+	[self stopMonitoringFence:annotation.fence];
+    [self updateFenceCount];
     
     AppDelegate *objAppDel = (AppDelegate *)[[UIApplication sharedApplication]delegate];
     NSManagedObjectContext *context = [objAppDel managedObjectContext];
-    
-    // Create a new managed object
-    NSManagedObject *newFence = [NSEntityDescription insertNewObjectForEntityForName:@"Fence" inManagedObjectContext:context];
-    
-    [newFence setValue:lat forKey:@"latitude"];
-    [newFence setValue:lon forKey:@"longitude"];
-    [newFence setValue:range forKey:@"range"];
-    [newFence setValue:type forKey:@"uponEntry"];
-    [newFence setValue:message forKey:@"message"];
-    [newFence setValue:[[NSUUID UUID] UUIDString] forKey:@"identifier"];
-    
+    [context deleteObject: annotation.fence];
     NSError *error = nil;
-    // Save the object to persistent store
     if (![context save:&error]) {
-        NSLog(@"Can't Save! %@ %@", error, [error localizedDescription]);
+        NSLog(@"Couldn't save: %@", error);
     }
-    
-    FenceAnnotation *annotation = [[FenceAnnotation alloc] initWithFence:newFence];
-    [self addFenceAnnotation:annotation];
-    
 }
 
-- (void)updateFenceCount {
-    //TOOD
-//    title = "Geotifications: \(geotifications.count)"
-//    navigationItem.rightBarButtonItem?.isEnabled = (geotifications.count < 20)
-}
-
-#pragma mark Map overlay functions
 - (void)addRadiusOverlayForFenceAnnotation:(FenceAnnotation*)annotation {
+	// Add circle to the annotation for radius
     [self.mapView addOverlay:[MKCircle circleWithCenterCoordinate:annotation.coordinate radius:annotation.radius]];
 }
 
 - (void)removeRadiusOverlayforFenceAnnotation:(FenceAnnotation*)annotation {
-    
-    NSLog(@"Deleting lat %f lon %f, radius %d", annotation.coordinate.latitude, annotation.coordinate.longitude, annotation.radius);
+    // Remove radius overlay for annotation
     for (id<MKOverlay> overlay in [self.mapView overlays]) {
         MKCircle *circle = overlay;
-        NSLog(@"check lat %f lon %f, radius %d", circle.coordinate.latitude, circle.coordinate.longitude, (int)circle.radius);
-        if(circle.coordinate.latitude == annotation.coordinate.latitude && circle.coordinate.longitude == annotation.coordinate.longitude && (int)(circle.radius) == annotation.radius) {
+		if(circle.coordinate.latitude == annotation.coordinate.latitude && circle.coordinate.longitude == annotation.coordinate.longitude && (int)(circle.radius) == annotation.radius) {
             [self.mapView removeOverlay:circle];
             break;
         }
     }
+}
+
+- (void)updateFenceCount {
+	//TODO
+//    title = "Geotifications: \(geotifications.count)"
+//    navigationItem.rightBarButtonItem?.isEnabled = (geotifications.count < 20)
 }
 
 - (void)startMonitoring:(NSManagedObject *)fence {
@@ -209,11 +189,39 @@
     
     CLCircularRegion *region = [[CLCircularRegion alloc] initWithCenter:CLLocationCoordinate2DMake([[fence valueForKey:@"latitude"] doubleValue], [[fence valueForKey:@"longitude"] doubleValue]) radius:[[fence valueForKey:@"range"] doubleValue] identifier:[fence valueForKey:@"message"]];
     
-    region.notifyOnExit = ![fence valueForKey:@"uponEntry"];
-    region.notifyOnEntry = [fence valueForKey:@"uponEntry"];
-    
+	region.notifyOnEntry = [fence valueForKey:@"uponEntry"];
+    region.notifyOnExit = !region.notifyOnEntry;   
+
     return region;
 }
 
+#pragma mark - AddFence Delegate
+
+- (void)addFenceWithMessage:(NSString *)message Range:(NSNumber *)range Type:(NSNumber *)type Lat:(NSNumber *)lat Lon:(NSNumber *)lon {
+    
+    AppDelegate *objAppDel = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+    NSManagedObjectContext *context = [objAppDel managedObjectContext];
+    
+    // Create a new managed object
+    NSManagedObject *newFence = [NSEntityDescription insertNewObjectForEntityForName:@"Fence" inManagedObjectContext:context];
+    
+    [newFence setValue:lat forKey:@"latitude"];
+    [newFence setValue:lon forKey:@"longitude"];
+    [newFence setValue:range forKey:@"range"];	//clamp radius here
+    [newFence setValue:type forKey:@"uponEntry"];
+    [newFence setValue:message forKey:@"message"];
+    [newFence setValue:[[NSUUID UUID] UUIDString] forKey:@"identifier"];
+    
+    NSError *error = nil;
+    // Save the object to persistent store
+    if (![context save:&error]) {
+        NSLog(@"Can't Save! %@ %@", error, [error localizedDescription]);
+    }
+    
+    FenceAnnotation *annotation = [[FenceAnnotation alloc] initWithFence:newFence];
+    [self addFenceAnnotation:annotation];
+    
+}
 
 @end
+
