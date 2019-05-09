@@ -42,13 +42,9 @@
 }
 
 - (void)loadAllFences {
-    // Fetch the fences from persistent data store
-    NSManagedObjectContext *context = [self.appDelegate managedObjectContext];
-    
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Fence"];
-    NSArray *fences = [[context executeFetchRequest:fetchRequest error:nil] mutableCopy];
-    
-    for (NSManagedObject *fence in fences) {
+  
+    // Add all pre existing fences to the mapview
+    for (NSManagedObject *fence in [self.appDelegate getFences]) {
         [self addFenceAnnotation:[[FenceAnnotation alloc] initWithFence:fence]];
     }
 }
@@ -136,6 +132,7 @@
 
 - (void)addFenceAnnotation:(FenceAnnotation*)annotation {
 	// Add fence to the model
+    
     [self.mapView addAnnotation:annotation];
     [self addRadiusOverlayForFenceAnnotation:annotation];
     self.fenceCount++;
@@ -192,14 +189,19 @@
     for (CLRegion *region in self.locationManager.monitoredRegions) {
         if(region.identifier == [fence valueForKey:@"identifier"]) {
             [self.locationManager stopMonitoringForRegion:region];
-            break;
+            NSLog(@"Deleted region with identifier: %@", region.identifier);
+            return;
         }
     }
+    
+    NSLog(@"Could not delete region with identifier: %@", [fence valueForKey:@"identifier"]);
 }
 
 - (CLCircularRegion *)convert:(NSManagedObject *)fence {
     
-    CLCircularRegion *region = [[CLCircularRegion alloc] initWithCenter:CLLocationCoordinate2DMake([[fence valueForKey:@"latitude"] doubleValue], [[fence valueForKey:@"longitude"] doubleValue]) radius:[[fence valueForKey:@"range"] doubleValue] identifier:[fence valueForKey:@"message"]];
+    CLCircularRegion *region = [[CLCircularRegion alloc] initWithCenter:CLLocationCoordinate2DMake([[fence valueForKey:@"latitude"] doubleValue], [[fence valueForKey:@"longitude"] doubleValue]) radius:[[fence valueForKey:@"range"] doubleValue] identifier:[fence valueForKey:@"identifier"]];
+    
+    NSLog(@"Inserted region with identiier: %@", region.identifier);
     
 	region.notifyOnEntry = [fence valueForKey:@"uponEntry"];
     region.notifyOnExit = !region.notifyOnEntry;   

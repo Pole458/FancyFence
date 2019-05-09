@@ -6,6 +6,7 @@
 //
 
 #import "AppDelegate.h"
+#import <UserNotifications/UserNotifications.h>
 
 @interface AppDelegate ()
 
@@ -20,7 +21,14 @@
     // Override point for customization after application launch.
     self.locationManager.delegate = self;
     [self.locationManager requestAlwaysAuthorization];
-    NSLog(@"app did finish launching");
+
+    
+    [[UNUserNotificationCenter currentNotificationCenter] requestAuthorizationWithOptions:(UNAuthorizationOptionBadge | UNAuthorizationOptionBadge | UNAuthorizationOptionAlert) completionHandler:^(BOOL granted, NSError * _Nullable error) {
+        if(!error){
+//            [[UIApplication sharedApplication] registerForRemoteNotifications];
+        }
+    }];
+    
     return YES;
 }
 
@@ -43,6 +51,11 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    
+    application.applicationIconBadgeNumber = 0;
+    [[UNUserNotificationCenter currentNotificationCenter] removeAllPendingNotificationRequests];
+    [[UNUserNotificationCenter currentNotificationCenter] removeAllDeliveredNotifications];
+    
 }
 
 
@@ -69,7 +82,60 @@
 }
 
 - (void)handleEventForRegion:(CLRegion*)region {
-    NSLog(@"Region!");
+    
+    NSManagedObject *fence = [self getFenceWithIdentifier:region.identifier];
+    
+    NSString *message = [fence valueForKey:@"message"];
+    bool entry = [fence valueForKey:@"uponEntry"];
+    
+    if (fence)
+        NSLog(@"Notify!: %@ %d, %@", message, entry, region.identifier);
+    else
+        NSLog(@"Could not find ragion with id: %@", region.identifier);
+    
+    
+    if(UIApplication.sharedApplication.applicationState == UIApplicationStateActive) {
+        
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Fancy Fence"
+                                                                       message:@"Message"
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+        
+//        [self.window.rootViewController showViewController:alert sender:self];
+
+    }
+//    else {
+//        // Otherwise present a local notification
+//
+//        UNMutableNotificationContent *notificationContent = [[UNMutableNotificationContent alloc] init];
+//        notificationContent.body = [fence valueForKey:@"message"];
+//        notificationContent.sound = [UNNotificationSound defaultSound];
+//        notificationContent.badge = [NSNumber numberWithInteger:UIApplication.sharedApplication.applicationIconBadgeNumber + 1];
+//
+//        UNTimeIntervalNotificationTrigger *trigger = [UNTimeIntervalNotificationTrigger triggerWithTimeInterval:1 repeats:NO];
+//
+//        UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:@"location_change" content:notificationContent trigger:trigger];
+//
+//        [[UNUserNotificationCenter currentNotificationCenter] addNotificationRequest:request withCompletionHandler:^(NSError * _Nullable error) {
+////            print error
+//        }];
+//    }
+}
+
+#pragma mark -
+
+- (NSArray*)getFences {
+    // Fetch all the fences from persistent data store
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Fence"];
+    return [[self.managedObjectContext executeFetchRequest:fetchRequest error:nil] mutableCopy];
+}
+
+- (NSManagedObject*)getFenceWithIdentifier:(NSString*)identifier {
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Fence"];
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat: @"%K == %@", @"identifier", identifier];
+    [fetchRequest setPredicate:predicate];
+    
+    return [[self.managedObjectContext executeFetchRequest:fetchRequest error:nil] mutableCopy];
 }
 
 #pragma mark - Core Data stack
@@ -103,7 +169,6 @@
     
     _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
     NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"Model.sqlite"];
-    NSLog(@"DB Path==> %@",storeURL);
     NSError *error = nil;
     NSString *failureReason = @"There was an error creating or loading the application's saved data.";
     if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error])

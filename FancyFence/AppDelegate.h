@@ -21,5 +21,7 @@
 
 - (void)saveContext;
 
+- (NSArray*)getFences;
+
 @end
 
