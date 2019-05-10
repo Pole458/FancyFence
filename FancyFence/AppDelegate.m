@@ -22,7 +22,6 @@
     self.locationManager.delegate = self;
     [self.locationManager requestAlwaysAuthorization];
 
-    
     [[UNUserNotificationCenter currentNotificationCenter] requestAuthorizationWithOptions:(UNAuthorizationOptionBadge | UNAuthorizationOptionBadge | UNAuthorizationOptionAlert) completionHandler:^(BOOL granted, NSError * _Nullable error) {
         if(!error){
 //            [[UIApplication sharedApplication] registerForRemoteNotifications];
@@ -85,7 +84,7 @@
     
     NSManagedObject *fence = [self getFenceWithIdentifier:region.identifier];
     
-    NSString *message = [fence valueForKey:@"message"][0];
+    NSString *message = [fence valueForKey:@"message"];
     bool entry = [fence valueForKey:@"uponEntry"];
     
     if (fence)
@@ -102,12 +101,9 @@
         UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
                                                               handler:^(UIAlertAction * action) {}];
         [alert addAction:defaultAction];
-        
         [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
-        
-
-    }
-    else {
+    
+    } else {
         // Otherwise present a local notification
 
         UNMutableNotificationContent *notificationContent = [[UNMutableNotificationContent alloc] init];
@@ -116,12 +112,10 @@
         notificationContent.badge = [NSNumber numberWithInteger:UIApplication.sharedApplication.applicationIconBadgeNumber + 1];
 
         UNTimeIntervalNotificationTrigger *trigger = [UNTimeIntervalNotificationTrigger triggerWithTimeInterval:1 repeats:NO];
-
+        
         UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:@"location_change" content:notificationContent trigger:trigger];
-
-        [[UNUserNotificationCenter currentNotificationCenter] addNotificationRequest:request withCompletionHandler:^(NSError * _Nullable error) {
-//            print error
-        }];
+        
+        [[UNUserNotificationCenter currentNotificationCenter] addNotificationRequest:request withCompletionHandler:nil];
     }
 }
 
@@ -139,7 +133,7 @@
     NSPredicate *predicate = [NSPredicate predicateWithFormat: @"%K == %@", @"identifier", identifier];
     [fetchRequest setPredicate:predicate];
     
-    return [[self.managedObjectContext executeFetchRequest:fetchRequest error:nil] mutableCopy];
+    return [[self.managedObjectContext executeFetchRequest:fetchRequest error:nil] mutableCopy][0];
 }
 
 #pragma mark - Core Data stack

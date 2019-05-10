@@ -35,18 +35,12 @@
     
 }
 
+#pragma mark - Lazy Loading
+
 - (CLLocationManager *)locationManager{
     // Lazy loading location manager
     if(!_locationManager) _locationManager = [[CLLocationManager alloc] init];
     return _locationManager;
-}
-
-- (void)loadAllFences {
-  
-    // Add all pre existing fences to the mapview
-    for (NSManagedObject *fence in [self.appDelegate getFences]) {
-        [self addFenceAnnotation:[[FenceAnnotation alloc] initWithFence:fence]];
-    }
 }
 
 - (AppDelegate*)appDelegate {
@@ -55,7 +49,15 @@
     return _appDelegate;
 }
 
+- (void)loadAllFences {
+    // Add all pre existing fences to the mapview
+    for (NSManagedObject *fence in [self.appDelegate getFences]) {
+        [self addFenceAnnotation:[[FenceAnnotation alloc] initWithFence:fence]];
+    }
+}
+
 - (void)setFenceCount:(int)fenceCount {
+    // The Geofencing API is limited to 20 monitored regions
     _fenceCount = fenceCount;
     [self.addButton setEnabled: _fenceCount < 20];
 }
@@ -154,12 +156,10 @@
 }
 
 - (void)addRadiusOverlayForFenceAnnotation:(FenceAnnotation*)annotation {
-	// Add circle to the annotation for radius
     [self.mapView addOverlay:[MKCircle circleWithCenterCoordinate:annotation.coordinate radius:annotation.radius]];
 }
 
 - (void)removeRadiusOverlayforFenceAnnotation:(FenceAnnotation*)annotation {
-    // Remove radius overlay for annotation
     for (id<MKOverlay> overlay in [self.mapView overlays]) {
         MKCircle *circle = overlay;
 		if(circle.coordinate.latitude == annotation.coordinate.latitude && circle.coordinate.longitude == annotation.coordinate.longitude && (int)(circle.radius) == annotation.radius) {
@@ -187,21 +187,16 @@
 
 - (void)stopMonitoringFence:(NSManagedObject*)fence {
     for (CLRegion *region in self.locationManager.monitoredRegions) {
-        if(region.identifier == [fence valueForKey:@"identifier"]) {
+        if([region.identifier isEqualToString:[fence valueForKey:@"identifier"]]) {
             [self.locationManager stopMonitoringForRegion:region];
-            NSLog(@"Deleted region with identifier: %@", region.identifier);
             return;
         }
     }
-    
-    NSLog(@"Could not delete region with identifier: %@", [fence valueForKey:@"identifier"]);
 }
 
 - (CLCircularRegion *)convert:(NSManagedObject *)fence {
     
     CLCircularRegion *region = [[CLCircularRegion alloc] initWithCenter:CLLocationCoordinate2DMake([[fence valueForKey:@"latitude"] doubleValue], [[fence valueForKey:@"longitude"] doubleValue]) radius:[[fence valueForKey:@"range"] doubleValue] identifier:[fence valueForKey:@"identifier"]];
-    
-    NSLog(@"Inserted region with identiier: %@", region.identifier);
     
 	region.notifyOnEntry = [fence valueForKey:@"uponEntry"];
     region.notifyOnExit = !region.notifyOnEntry;   
