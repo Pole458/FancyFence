@@ -85,7 +85,7 @@
     
     NSManagedObject *fence = [self getFenceWithIdentifier:region.identifier];
     
-    NSString *message = [fence valueForKey:@"message"];
+    NSString *message = [fence valueForKey:@"message"][0];
     bool entry = [fence valueForKey:@"uponEntry"];
     
     if (fence)
@@ -97,28 +97,32 @@
     if(UIApplication.sharedApplication.applicationState == UIApplicationStateActive) {
         
         UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Fancy Fence"
-                                                                       message:@"Message"
+                                                                       message:message
                                                                 preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
+                                                              handler:^(UIAlertAction * action) {}];
+        [alert addAction:defaultAction];
         
-//        [self.window.rootViewController showViewController:alert sender:self];
+        [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
+        
 
     }
-//    else {
-//        // Otherwise present a local notification
-//
-//        UNMutableNotificationContent *notificationContent = [[UNMutableNotificationContent alloc] init];
-//        notificationContent.body = [fence valueForKey:@"message"];
-//        notificationContent.sound = [UNNotificationSound defaultSound];
-//        notificationContent.badge = [NSNumber numberWithInteger:UIApplication.sharedApplication.applicationIconBadgeNumber + 1];
-//
-//        UNTimeIntervalNotificationTrigger *trigger = [UNTimeIntervalNotificationTrigger triggerWithTimeInterval:1 repeats:NO];
-//
-//        UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:@"location_change" content:notificationContent trigger:trigger];
-//
-//        [[UNUserNotificationCenter currentNotificationCenter] addNotificationRequest:request withCompletionHandler:^(NSError * _Nullable error) {
-////            print error
-//        }];
-//    }
+    else {
+        // Otherwise present a local notification
+
+        UNMutableNotificationContent *notificationContent = [[UNMutableNotificationContent alloc] init];
+        notificationContent.body = message;
+        notificationContent.sound = [UNNotificationSound defaultSound];
+        notificationContent.badge = [NSNumber numberWithInteger:UIApplication.sharedApplication.applicationIconBadgeNumber + 1];
+
+        UNTimeIntervalNotificationTrigger *trigger = [UNTimeIntervalNotificationTrigger triggerWithTimeInterval:1 repeats:NO];
+
+        UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:@"location_change" content:notificationContent trigger:trigger];
+
+        [[UNUserNotificationCenter currentNotificationCenter] addNotificationRequest:request withCompletionHandler:^(NSError * _Nullable error) {
+//            print error
+        }];
+    }
 }
 
 #pragma mark -
