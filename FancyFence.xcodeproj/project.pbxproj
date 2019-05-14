@@ -15,6 +15,7 @@
 		6C2CD5932279DE3F00216953 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6C2CD5912279DE3F00216953 /* LaunchScreen.storyboard */; };
 		6C2CD5962279DE3F00216953 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C2CD5952279DE3F00216953 /* main.m */; };
 		6C2CD5A02279EA0100216953 /* AddViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C2CD59F2279EA0100216953 /* AddViewController.m */; };
+		6C81FAC2228B1DA4008E4C74 /* FenceModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C81FAC1228B1DA4008E4C74 /* FenceModel.m */; };
 		6C923D25227B34C700360EF6 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6C923D23227B34C700360EF6 /* Model.xcdatamodeld */; };
 		6C95B4B32281E35E006125AF /* FenceAnnotation.h in Sources */ = {isa = PBXBuildFile; fileRef = 6C95B4B22281E176006125AF /* FenceAnnotation.h */; };
 		6C95B4B42281E35E006125AF /* FenceAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C95B4B12281E087006125AF /* FenceAnnotation.m */; };
@@ -38,6 +39,8 @@
 		6C2CD5952279DE3F00216953 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		6C2CD59E2279EA0100216953 /* AddViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AddViewController.h; sourceTree = "<group>"; };
 		6C2CD59F2279EA0100216953 /* AddViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AddViewController.m; sourceTree = "<group>"; };
+		6C81FAC1228B1DA4008E4C74 /* FenceModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FenceModel.m; sourceTree = "<group>"; };
+		6C81FAC3228B1E1B008E4C74 /* FenceModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FenceModel.h; sourceTree = "<group>"; };
 		6C923D24227B34C700360EF6 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		6C95B4B12281E087006125AF /* FenceAnnotation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FenceAnnotation.m; sourceTree = "<group>"; };
 		6C95B4B22281E176006125AF /* FenceAnnotation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FenceAnnotation.h; sourceTree = "<group>"; };
@@ -81,23 +84,41 @@
 			children = (
 				6C2CD5832279DE3E00216953 /* AppDelegate.h */,
 				6C2CD5842279DE3E00216953 /* AppDelegate.m */,
-				6C2CD5862279DE3E00216953 /* ViewController.h */,
-				6C2CD5872279DE3E00216953 /* ViewController.m */,
+				6C81FAC5228B1F53008E4C74 /* ViewControllers */,
+				6C81FAC4228B1F45008E4C74 /* Model */,
 				6C2CD5892279DE3E00216953 /* Main.storyboard */,
 				6C923D23227B34C700360EF6 /* Model.xcdatamodeld */,
 				6C2CD58F2279DE3F00216953 /* Assets.xcassets */,
+				6CB7148322845EEB006ED473 /* Supporting Files */,
+				6C2CD58C2279DE3E00216953 /* FancyFence.xcdatamodeld */,
 				6C2CD5912279DE3F00216953 /* LaunchScreen.storyboard */,
 				6C2CD5942279DE3F00216953 /* Info.plist */,
 				6C2CD5952279DE3F00216953 /* main.m */,
-				6C2CD58C2279DE3E00216953 /* FancyFence.xcdatamodeld */,
-				6C2CD59E2279EA0100216953 /* AddViewController.h */,
-				6C2CD59F2279EA0100216953 /* AddViewController.m */,
-				6C95B4B22281E176006125AF /* FenceAnnotation.h */,
-				6C95B4B12281E087006125AF /* FenceAnnotation.m */,
-				6CB7148322845EEB006ED473 /* Supporting Files */,
 				6C2CD5812279DE3E00216953 /* Products */,
 			);
 			path = FancyFence;
+			sourceTree = "<group>";
+		};
+		6C81FAC4228B1F45008E4C74 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				6C95B4B22281E176006125AF /* FenceAnnotation.h */,
+				6C95B4B12281E087006125AF /* FenceAnnotation.m */,
+				6C81FAC3228B1E1B008E4C74 /* FenceModel.h */,
+				6C81FAC1228B1DA4008E4C74 /* FenceModel.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		6C81FAC5228B1F53008E4C74 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				6C2CD59E2279EA0100216953 /* AddViewController.h */,
+				6C2CD59F2279EA0100216953 /* AddViewController.m */,
+				6C2CD5862279DE3E00216953 /* ViewController.h */,
+				6C2CD5872279DE3E00216953 /* ViewController.m */,
+			);
+			path = ViewControllers;
 			sourceTree = "<group>";
 		};
 		6CB55F4F227A041000E4F2E1 /* Frameworks */ = {
@@ -197,6 +218,7 @@
 				6C2CD5852279DE3E00216953 /* AppDelegate.m in Sources */,
 				6C923D25227B34C700360EF6 /* Model.xcdatamodeld in Sources */,
 				6C2CD5962279DE3F00216953 /* main.m in Sources */,
+				6C81FAC2228B1DA4008E4C74 /* FenceModel.m in Sources */,
 				6C2CD58E2279DE3E00216953 /* FancyFence.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

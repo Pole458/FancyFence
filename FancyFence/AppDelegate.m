@@ -73,25 +73,37 @@
 #pragma mark - CoreLocationManager Delegate
 
 -(void)locationManager:(CLLocationManager *)manager didEnterRegion:(CLRegion *)region {
-    [self handleEventForRegion:region];
-}
-
-- (void)locationManager:(CLLocationManager *)manager didExitRegion:(CLRegion *)region {
-    [self handleEventForRegion:region];
-}
-
-- (void)handleEventForRegion:(CLRegion*)region {
     
     NSManagedObject *fence = [self getFenceWithIdentifier:region.identifier];
     
-    NSString *message = [fence valueForKey:@"message"];
-    bool entry = [fence valueForKey:@"uponEntry"];
+    NSString *name = [fence valueForKey:@"name"];
+    NSString *entry = [fence valueForKey:@"entry"];
     
     if (fence)
-        NSLog(@"Notify!: %@ %d, %@", message, entry, region.identifier);
+        NSLog(@"Notify!: %@, %@", name, entry);
     else
         NSLog(@"Could not find ragion with id: %@", region.identifier);
     
+    [self notifyFenceWithName:name Message:entry];
+
+}
+
+- (void)locationManager:(CLLocationManager *)manager didExitRegion:(CLRegion *)region {
+    
+    NSManagedObject *fence = [self getFenceWithIdentifier:region.identifier];
+    
+    NSString *name = [fence valueForKey:@"name"];
+    NSString *exit = [fence valueForKey:@"exit"];
+    
+    if (fence)
+        NSLog(@"Notify!: %@, %@", name, exit);
+    else
+        NSLog(@"Could not find ragion with id %@", region.identifier);
+    
+    [self notifyFenceWithName:name Message:exit];
+}
+
+- (void)notifyFenceWithName:(NSString*)name Message:(NSString*)message {
     
     if(UIApplication.sharedApplication.applicationState == UIApplicationStateActive) {
         

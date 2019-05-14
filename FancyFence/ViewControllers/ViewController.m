@@ -37,7 +37,7 @@
 
 #pragma mark - Lazy Loading
 
-- (CLLocationManager *)locationManager{
+- (CLLocationManager *)locationManager {
     // Lazy loading location manager
     if(!_locationManager) _locationManager = [[CLLocationManager alloc] init];
     return _locationManager;
@@ -66,13 +66,19 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     
+    UINavigationController *nav = segue.destinationViewController;
+    AddViewController *fenceVC = (AddViewController*)nav.topViewController;
+    fenceVC.delegate = self;
+    
     if ([segue.identifier isEqualToString:@"toAddFenceVC"]) {
         
-        UINavigationController *nav = segue.destinationViewController;
-        AddViewController *addVC = (AddViewController*)nav.topViewController;
+        fenceVC.userRegion = self.mapView.region;
+    }
+    
+    if ([[segue identifier] isEqualToString:@"toEditFenceVC"]) {
         
-        addVC.delegate = self;
-        addVC.userCoordinate = self.mapView.region;
+        fenceVC.annotation = (FenceAnnotation*)sender;
+        fenceVC.userRegion = self.mapView.region;
     }
 }
 
@@ -92,9 +98,17 @@
 }
 
 - (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control {
-	// Remove annotation when user taps delete button
     FenceAnnotation *annotation = view.annotation;
-    [self removeFenceAnnotation:annotation];
+    
+    if(view.leftCalloutAccessoryView == control) {
+        // Remove annotation when user taps delete button
+        [self removeFenceAnnotation:annotation];
+    }
+    
+    if(view.rightCalloutAccessoryView == control) {
+        //Open FenceVC to edit selected fence
+        [self performSegueWithIdentifier:@"toEditFenceVC" sender:annotation];
+    }
 }
 
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
@@ -106,15 +120,21 @@
         if(!annotationView) {
             annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:identifier];
             annotationView.canShowCallout = YES;
+            
             UIButton *removeButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 23, 23)];
             [removeButton setImage:[UIImage imageNamed:@"DeleteFence"] forState:normal];
             annotationView.leftCalloutAccessoryView = removeButton;
+            
+            UIButton *editButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 23, 23)];
+            [editButton setImage:[UIImage imageNamed:@"compose"] forState:normal];
+            annotationView.rightCalloutAccessoryView = editButton;
+            
         } else {
             annotationView.annotation = annotation;
         }
         return annotationView;
     }
-    return  nil;
+    return nil;
 }
 
 - (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay {
@@ -141,18 +161,13 @@
 }
 
 - (void)removeFenceAnnotation:(FenceAnnotation*)annotation {
-    // Remove fence from the model
+    // Remove fence
     [self.mapView removeAnnotation:annotation];
     [self removeRadiusOverlayforFenceAnnotation:annotation];
-	[self stopMonitoringFence:annotation.fence];
+	[self stopMonitoringFence:annotation];
     self.fenceCount--;
     
-    NSManagedObjectContext *context = [self.appDelegate managedObjectContext];
-    [context deleteObject: annotation.fence];
-    NSError *error = nil;
-    if (![context save:&error]) {
-        NSLog(@"Couldn't save: %@", error);
-    }
+    [FenceModel removeFence:annotation.fence];
 }
 
 - (void)addRadiusOverlayForFenceAnnotation:(FenceAnnotation*)annotation {
@@ -169,7 +184,7 @@
     }
 }
 
-- (void)startMonitoring:(NSManagedObject *)fence {
+- (void)startMonitoring:(FenceAnnotation *)annotation {
     
     if(![CLLocationManager isMonitoringAvailableForClass:[CLCircularRegion class]]) {
         NSLog(@"Geofencing not supported on this device!");
@@ -179,48 +194,56 @@
     if( CLLocationManager.authorizationStatus != kCLAuthorizationStatusAuthorizedAlways) {
         NSLog(@"Your geotification is saved but will only be activated once you grant Geotify permission to access the device location.");
     }
-    
-    CLCircularRegion *region = [self convert:fence];
-    [self.locationManager startMonitoringForRegion:region];
+
+    [self.locationManager startMonitoringForRegion:[annotation getRegion]];
 
 }
 
-- (void)stopMonitoringFence:(NSManagedObject*)fence {
+- (void)stopMonitoringFence:(FenceAnnotation*)annotation {
     for (CLRegion *region in self.locationManager.monitoredRegions) {
-        if([region.identifier isEqualToString:[fence valueForKey:@"identifier"]]) {
+        if([region.identifier isEqualToString:annotation.identifier]) {
             [self.locationManager stopMonitoringForRegion:region];
             return;
         }
     }
 }
 
-- (CLCircularRegion *)convert:(NSManagedObject *)fence {
-    
-    CLCircularRegion *region = [[CLCircularRegion alloc] initWithCenter:CLLocationCoordinate2DMake([[fence valueForKey:@"latitude"] doubleValue], [[fence valueForKey:@"longitude"] doubleValue]) radius:[[fence valueForKey:@"range"] doubleValue] identifier:[fence valueForKey:@"identifier"]];
-    
-	region.notifyOnEntry = [fence valueForKey:@"uponEntry"];
-    region.notifyOnExit = !region.notifyOnEntry;   
-
-    return region;
-}
-
 #pragma mark - AddFence Delegate
 
-- (void)addFenceWithMessage:(NSString *)message Range:(NSNumber *)range Type:(NSNumber *)type Lat:(NSNumber *)lat Lon:(NSNumber *)lon {
+- (void)addFenceWithName:(NSString *)name Radius:(NSNumber *)radius Lat:(NSNumber *)lat Lon:(NSNumber *)lon Entry:(NSString *)entry Exit:(NSString *)exit Identifier:(NSString *)identifier{
     
     //Check max radius
     NSNumber *maxRange = [NSNumber numberWithDouble:self.locationManager.maximumRegionMonitoringDistance];
-    NSComparisonResult result = [range compare:maxRange];
-    range = (result == NSOrderedDescending) ? maxRange : range;
+    NSComparisonResult result = [radius compare:maxRange];
+    radius = (result == NSOrderedDescending) ? maxRange : radius;
     
     // Create annotation and add it to the NSManagedObjectContext
-    FenceAnnotation *annotation = [[FenceAnnotation alloc] initWithMessage:message Range:range Type:type Lat:lat Lon:lon WithContext:self.appDelegate.managedObjectContext];
+    FenceAnnotation *annotation = [[FenceAnnotation alloc] initWithName:name Range:radius Lat:lat Lon:lon Entry:entry Exit:exit Identifier:identifier];
     
     // Add annotation to the mapview
     [self addFenceAnnotation:annotation];
     
     // Start monitoring
-    [self startMonitoring:annotation.fence];
+    [self startMonitoring:annotation];
+    
+}
+
+- (void)editFence:(FenceAnnotation *)annotation withName:(NSString *)name Radius:(NSNumber *)radius Lat:(NSNumber *)lat Lon:(NSNumber *)lon Entry:(NSString *)entry Exit:(NSString *)exit {
+    
+    [self removeFenceAnnotation:annotation];
+    
+    //Check max radius
+    NSNumber *maxRange = [NSNumber numberWithDouble:self.locationManager.maximumRegionMonitoringDistance];
+    NSComparisonResult result = [radius compare:maxRange];
+    radius = (result == NSOrderedDescending) ? maxRange : radius;
+    
+    [annotation editWithName:name Range:radius Lat:lat Lon:lon Entry:entry Exit:exit];
+    
+    // Add annotation to the mapview
+    [self addFenceAnnotation:annotation];
+    
+    // Start monitoring
+    [self startMonitoring:annotation];
     
 }
 

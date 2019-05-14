@@ -21,9 +21,17 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    //Set received map region
-    self.mapView.region = self.userCoordinate;
-	
+    //Set received data from segue
+    self.mapView.region = self.userRegion;
+    
+    if(self.annotation) {
+        self.nameTextField.text = self.annotation.title;
+        self.rangeTextField.text = [NSString stringWithFormat:@"%d", self.annotation.radius];
+        self.entryTextField.text = self.annotation.entry;
+        self.exitTextField.text = self.annotation.exit;
+        self.mapView.centerCoordinate = self.annotation.coordinate;
+    }
+    
     self.mapView.showsUserLocation = YES;
   
     // Register for keyboard notifications
@@ -33,11 +41,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillBeHidden:)
                                                  name:UIKeyboardWillHideNotification object:nil];
-    
-}
 
-- (void)textFieldDidChange {
-    
 }
 
 - (IBAction)closeKeyboard:(id)sender {
@@ -50,7 +54,19 @@
 
 - (IBAction)save:(id)sender {
     
-    [self.delegate addFenceWithMessage:self.messageTextField.text Range:[NSNumber numberWithInt:[self.rangeTextField.text intValue]] Type:[NSNumber numberWithBool:!self.typeSegControl.selectedSegmentIndex] Lat:[NSNumber numberWithDouble:self.mapView.centerCoordinate.latitude] Lon:[NSNumber numberWithDouble:self.mapView.centerCoordinate.longitude]];
+    NSNumber *radius = [NSNumber numberWithInt:[self.rangeTextField.text intValue]];
+    NSNumber *lat = [NSNumber numberWithDouble:self.mapView.centerCoordinate.latitude];
+    NSNumber *lon = [NSNumber numberWithDouble:self.mapView.centerCoordinate.longitude];
+    
+    if(self.annotation) {
+        
+        [self.delegate editFence:self.annotation withName:self.nameTextField.text Radius:radius Lat:lat Lon:lon Entry:self.entryTextField.text Exit:self.exitTextField.text];
+        
+    } else {
+        
+        [self.delegate addFenceWithName:self.nameTextField.text Radius:lat Lat:lat Lon:lon Entry:self.entryTextField.text Exit:self.exitTextField.text Identifier:[[NSUUID UUID] UUIDString]];
+    }
+    
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -88,7 +104,7 @@
 }
 
 - (IBAction)textFieldChanged:(id)sender {
-    [self.saveButton setEnabled:![self.messageTextField.text isEqual: @""] && ![self.rangeTextField.text isEqual: @""]];
+    [self.saveButton setEnabled:(![self.exitTextField.text isEqual: @""] || ![self.entryTextField.text isEqual:@""]) && ![self.nameTextField.text isEqual:@""] && ![self.rangeTextField.text isEqual: @""]];
 }
 
 @end
