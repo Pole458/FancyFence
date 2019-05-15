@@ -51,8 +51,8 @@
 
 - (void)loadAllFences {
     // Add all pre existing fences to the mapview
-    for (NSManagedObject *fence in [self.appDelegate getFences]) {
-        [self addFenceAnnotation:[[FenceAnnotation alloc] initWithFence:fence]];
+    for (FenceAnnotation *fence in [FenceModel getFences]) {
+        [self addFenceAnnotation:fence];
     }
 }
 
@@ -77,7 +77,7 @@
     
     if ([[segue identifier] isEqualToString:@"toEditFenceVC"]) {
         
-        fenceVC.annotation = (FenceAnnotation*)sender;
+        fenceVC.fence = (FenceAnnotation*)sender;
         fenceVC.userRegion = self.mapView.region;
     }
 }
@@ -98,16 +98,16 @@
 }
 
 - (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control {
-    FenceAnnotation *annotation = view.annotation;
+    FenceAnnotation *fence = view.annotation;
     
     if(view.leftCalloutAccessoryView == control) {
         // Remove annotation when user taps delete button
-        [self removeFenceAnnotation:annotation];
+        [self removeFenceAnnotation:fence];
     }
     
     if(view.rightCalloutAccessoryView == control) {
         //Open FenceVC to edit selected fence
-        [self performSegueWithIdentifier:@"toEditFenceVC" sender:annotation];
+        [self performSegueWithIdentifier:@"toEditFenceVC" sender:fence];
     }
 }
 
@@ -210,15 +210,17 @@
 
 #pragma mark - AddFence Delegate
 
-- (void)addFenceWithName:(NSString *)name Radius:(NSNumber *)radius Lat:(NSNumber *)lat Lon:(NSNumber *)lon Entry:(NSString *)entry Exit:(NSString *)exit Identifier:(NSString *)identifier{
+- (void)addFenceWithName:(NSString *)name Radius:(NSNumber *)radius Lat:(NSNumber *)lat Lon:(NSNumber *)lon Entry:(NSString *)entry Exit:(NSString *)exit {
     
     //Check max radius
     NSNumber *maxRange = [NSNumber numberWithDouble:self.locationManager.maximumRegionMonitoringDistance];
     NSComparisonResult result = [radius compare:maxRange];
     radius = (result == NSOrderedDescending) ? maxRange : radius;
     
-    // Create annotation and add it to the NSManagedObjectContext
-    FenceAnnotation *annotation = [[FenceAnnotation alloc] initWithName:name Range:radius Lat:lat Lon:lon Entry:entry Exit:exit Identifier:identifier];
+    NSLog(@"%d, %d", [radius intValue], [maxRange intValue]);
+    
+    // Create annotation
+    FenceAnnotation *annotation = [[FenceAnnotation alloc] initWithName:name Range:radius Lat:lat Lon:lon Entry:entry Exit:exit];
     
     // Add annotation to the mapview
     [self addFenceAnnotation:annotation];
@@ -238,6 +240,8 @@
     NSNumber *maxRange = [NSNumber numberWithDouble:self.locationManager.maximumRegionMonitoringDistance];
     NSComparisonResult result = [radius compare:maxRange];
     radius = (result == NSOrderedDescending) ? maxRange : radius;
+    
+    NSLog(@"%d, %d", [radius intValue], [maxRange intValue]);
     
     [annotation editWithName:name Range:radius Lat:lat Lon:lon Entry:entry Exit:exit];
     
@@ -265,6 +269,40 @@
     mapRegion.span.longitudeDelta = 0.2;
     
     [self.mapView setRegion:mapRegion animated: YES];
+}
+
+- (IBAction)csvButton:(id)sender {
+    
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Import/Export CSV" message:@"Import or export Fences as CSV. Pay attention, importing from CSV deletes all current Fences." preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction* exportAction = [UIAlertAction actionWithTitle:@"Export" style:UIAlertActionStyleDefault
+                                                          handler:^(UIAlertAction * action) {
+                                                              [FenceModel exportAsCSV];
+                                                              [self.appDelegate showNextNotification];
+                                                          }];
+    UIAlertAction* importAction = [UIAlertAction actionWithTitle:@"Import" style:UIAlertActionStyleDefault
+                                                          handler:^(UIAlertAction * action) {
+                                                              for (FenceAnnotation *fence in [FenceModel getFences]) {
+                                                                  [self removeFenceAnnotation:fence];
+                                                              }
+                                                              
+                                                              NSArray* fences = [FenceModel importAsCSV];
+                                                              for (FenceAnnotation *fence in fences) {
+                                                                  [self addFenceAnnotation:fence];
+                                                                  [self startMonitoring:fence];
+                                                              }
+                                                              [self.appDelegate showNextNotification];
+                                                          }];
+    UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDefault
+                                                         handler:^(UIAlertAction * _Nonnull action) {
+                                                             [self.appDelegate showNextNotification];
+                                                         }];
+    
+    [alert addAction:exportAction];
+    [alert addAction:importAction];
+    [alert addAction:cancelAction];
+    
+    [self.appDelegate pushNotification:alert];
 }
 
 @end

@@ -12,4 +12,12 @@
 
 + (void)removeFence:(NSManagedObject*)fence;
 
++ (NSArray*)getFences;
+
++ (id)getFenceWithIdentifier:(NSString*)identifier;
+
++ (void)exportAsCSV;
+
++ (NSArray*)importAsCSV;
+
 @end

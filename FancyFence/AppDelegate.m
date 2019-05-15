@@ -79,28 +79,22 @@
 
 -(void)locationManager:(CLLocationManager *)manager didEnterRegion:(CLRegion *)region {
     
-    NSManagedObject *fence = [self getFenceWithIdentifier:region.identifier];
-    
-    NSString *name = [fence valueForKey:@"name"];
-    NSString *entry = [fence valueForKey:@"entry"];
+    FenceAnnotation *fence = [FenceModel getFenceWithIdentifier:region.identifier];
     
     if (fence) {
-        NSLog(@"Notify!: %@, %@", name, entry);
-        [self notifyFenceWithName:name Message:entry];
+//        NSLog(@"Notify!: %@, %@", name, entry);
+        [self notifyFenceWithName:fence.title Message:fence.entry];
     } else
         NSLog(@"Could not find ragion with id: %@", region.identifier);
 }
 
 - (void)locationManager:(CLLocationManager *)manager didExitRegion:(CLRegion *)region {
     
-    NSManagedObject *fence = [self getFenceWithIdentifier:region.identifier];
-    
-    NSString *name = [fence valueForKey:@"name"];
-    NSString *exit = [fence valueForKey:@"exit"];
+    FenceAnnotation *fence = [FenceModel getFenceWithIdentifier:region.identifier];
     
     if (fence) {
-        NSLog(@"Notify!: %@, %@", name, exit);
-        [self notifyFenceWithName:name Message:exit];
+//        NSLog(@"Notify!: %@, %@", fence.title, fence.exit);
+        [self notifyFenceWithName:fence.title Message:fence.exit];
     } else
         NSLog(@"Could not find ragion with id %@", region.identifier);
 }
@@ -111,18 +105,12 @@
 
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:name message:message preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
-                                                              handler:^(UIAlertAction * action) {
-                                                                  [self.alerts removeObject:alert];
-                                                                  if(self.alerts.count > 0)
-                                                                      [self.window.rootViewController presentViewController:self.alerts[0] animated:YES completion:nil];
+                                                              handler:^(UIAlertAction * _Nonnull action) {
+                                                                  [self showNextNotification];
                                                               }];
         [alert addAction:defaultAction];
         
-        if(self.alerts.count == 0) {
-            [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
-        }
-        
-        [self.alerts addObject:alert];
+        [self pushNotification:alert];
 
     } else {
 //         Otherwise present a local notification
@@ -140,21 +128,22 @@
     }
 }
 
-#pragma mark -
+#pragma mark - Notification system
 
-- (NSArray*)getFences {
-    // Fetch all the fences from persistent data store
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Fence"];
-    return [[self.managedObjectContext executeFetchRequest:fetchRequest error:nil] mutableCopy];
+- (void)pushNotification:(UIAlertController *)alert {
+    
+    if(self.alerts.count == 0) {
+        [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
+    }
+    
+    [self.alerts addObject:alert];
 }
 
-- (NSManagedObject*)getFenceWithIdentifier:(NSString*)identifier {
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Fence"];
+- (void)showNextNotification {
     
-    NSPredicate *predicate = [NSPredicate predicateWithFormat: @"%K == %@", @"identifier", identifier];
-    [fetchRequest setPredicate:predicate];
-    
-    return [[self.managedObjectContext executeFetchRequest:fetchRequest error:nil] mutableCopy][0];
+    [self.alerts removeObjectAtIndex:0];
+    if(self.alerts.count > 0)
+        [self.window.rootViewController presentViewController:self.alerts[0] animated:YES completion:nil];
 }
 
 #pragma mark - Core Data stack

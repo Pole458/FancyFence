@@ -24,12 +24,12 @@
     //Set received data from segue
     self.mapView.region = self.userRegion;
     
-    if(self.annotation) {
-        self.nameTextField.text = self.annotation.title;
-        self.rangeTextField.text = [NSString stringWithFormat:@"%d", self.annotation.radius];
-        self.entryTextField.text = self.annotation.entry;
-        self.exitTextField.text = self.annotation.exit;
-        self.mapView.centerCoordinate = self.annotation.coordinate;
+    if(self.fence) {
+        self.nameTextField.text = self.fence.title;
+        self.rangeTextField.text = [NSString stringWithFormat:@"%d", self.fence.radius];
+        self.entryTextField.text = self.fence.entry;
+        self.exitTextField.text = self.fence.exit;
+        self.mapView.centerCoordinate = self.fence.coordinate;
     }
     
     self.mapView.showsUserLocation = YES;
@@ -58,13 +58,13 @@
     NSNumber *lat = [NSNumber numberWithDouble:self.mapView.centerCoordinate.latitude];
     NSNumber *lon = [NSNumber numberWithDouble:self.mapView.centerCoordinate.longitude];
     
-    if(self.annotation) {
+    if(self.fence) {
         
-        [self.delegate editFence:self.annotation withName:self.nameTextField.text Radius:radius Lat:lat Lon:lon Entry:self.entryTextField.text Exit:self.exitTextField.text];
+        [self.delegate editFence:self.fence withName:self.nameTextField.text Radius:radius Lat:lat Lon:lon Entry:self.entryTextField.text Exit:self.exitTextField.text];
         
     } else {
         
-        [self.delegate addFenceWithName:self.nameTextField.text Radius:lat Lat:lat Lon:lon Entry:self.entryTextField.text Exit:self.exitTextField.text Identifier:[[NSUUID UUID] UUIDString]];
+        [self.delegate addFenceWithName:self.nameTextField.text Radius:radius Lat:lat Lon:lon Entry:self.entryTextField.text Exit:self.exitTextField.text];
     }
     
     [self dismissViewControllerAnimated:YES completion:nil];

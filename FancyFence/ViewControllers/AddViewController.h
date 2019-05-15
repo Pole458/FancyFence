@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol AddFenceViewControllerDelegate
 
-- (void)addFenceWithName:(NSString*)name Radius:(NSNumber*)range Lat:(NSNumber*)lat Lon:(NSNumber*)lon Entry:(NSString*)entry Exit:(NSString*)exit Identifier:(NSString*)identifier;
+- (void)addFenceWithName:(NSString*)name Radius:(NSNumber*)range Lat:(NSNumber*)lat Lon:(NSNumber*)lon Entry:(NSString*)entry Exit:(NSString*)exit;
 
 - (void)editFence:(FenceAnnotation*)annotation withName:(NSString*)name Radius:(NSNumber*)radius Lat:(NSNumber*)lat Lon:(NSNumber*)lon Entry:(NSString*)entry Exit:(NSString*)exit;
 
@@ -33,7 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, retain) id delegate;
 
 @property MKCoordinateRegion userRegion;
-@property FenceAnnotation *annotation;
+@property FenceAnnotation *fence;
 
 - (IBAction)cancel:(id)sender;
 - (IBAction)save:(id)sender;

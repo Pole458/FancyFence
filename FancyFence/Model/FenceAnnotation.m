@@ -22,7 +22,7 @@
     return self;
 }
 
-- (id)initWithName:(NSString *)name Range:(NSNumber *)range Lat:(NSNumber *)lat Lon:(NSNumber *)lon Entry:(NSString *)entry Exit:(NSString *)exit Identifier:(NSString*)identifier {
+- (id)initWithName:(NSString *)name Range:(NSNumber *)range Lat:(NSNumber *)lat Lon:(NSNumber *)lon Entry:(NSString *)entry Exit:(NSString *)exit {
 
     if ((self = [super init])) {
         
@@ -35,12 +35,9 @@
         [self.fence setValue:lon forKey:@"longitude"];
         [self.fence setValue:entry forKey:@"entry"];
         [self.fence setValue:exit forKey:@"exit"];
-        if(identifier)
-            [self.fence setValue:identifier forKey:@"identifier"];
-        else
-            [self.fence setValue:[[NSUUID UUID] UUIDString] forKey:@"identifier"];
-            
-         // Save the object to persistent store
+        [self.fence setValue:[[NSUUID UUID] UUIDString] forKey:@"identifier"];
+        
+        // Save the object to persistent store
         [FenceModel saveModel];
     }
     return self;
@@ -104,6 +101,10 @@
     region.notifyOnExit = ![self.exit isEqual:@""];
     
     return region;
+}
+
+- (NSString *)getCSV {
+    return [NSString stringWithFormat:@"%@,%@,%@,%d,%f,%f\n",self.title, self.entry, self.exit, self.radius, self.coordinate.latitude, self.coordinate.longitude];
 }
 
 @end

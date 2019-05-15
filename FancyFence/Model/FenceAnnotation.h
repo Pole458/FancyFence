@@ -27,11 +27,13 @@
 
 - (id)initWithFence:(NSManagedObject*)fence;
 
-- (id)initWithName:(NSString *)name Range:(NSNumber *)range Lat:(NSNumber *)lat Lon:(NSNumber *)lon Entry:(NSString*)entry Exit:(NSString*)exit Identifier:(NSString*)identifier;
+- (id)initWithName:(NSString *)name Range:(NSNumber *)range Lat:(NSNumber *)lat Lon:(NSNumber *)lon Entry:(NSString*)entry Exit:(NSString*)exit;
 
 - (void)editWithName:(NSString *)name Range:(NSNumber *)range Lat:(NSNumber *)lat Lon:(NSNumber *)lon Entry:(NSString*)entry Exit:(NSString*)exit;
 
 - (CLCircularRegion*)getRegion;
+
+- (NSString*)getCSV;
 
 @end
 

@@ -38,11 +38,18 @@
                                 <action selector="userLocationButton:" destination="BYZ-38-t0r" id="Hya-33-EHW"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="Tg2-ul-rYs">
-                            <connections>
-                                <segue destination="ZPe-gu-Zkq" kind="presentation" identifier="toAddFenceVC" id="jfg-pS-ANL"/>
-                            </connections>
-                        </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem systemItem="add" id="Tg2-ul-rYs">
+                                <connections>
+                                    <segue destination="ZPe-gu-Zkq" kind="presentation" identifier="toAddFenceVC" id="jfg-pS-ANL"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem systemItem="organize" id="u2A-Cg-Gnp">
+                                <connections>
+                                    <action selector="csvButton:" destination="BYZ-38-t0r" id="CJc-48-zIr"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
