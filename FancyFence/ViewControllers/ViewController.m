@@ -153,7 +153,7 @@
 #pragma mark - Functions that update model and view
 
 - (void)addFenceAnnotation:(FenceAnnotation*)annotation {
-	// Add fence to the model
+	// Add fence
     
     [self.mapView addAnnotation:annotation];
     [self addRadiusOverlayForFenceAnnotation:annotation];
@@ -230,7 +230,9 @@
 
 - (void)editFence:(FenceAnnotation *)annotation withName:(NSString *)name Radius:(NSNumber *)radius Lat:(NSNumber *)lat Lon:(NSNumber *)lon Entry:(NSString *)entry Exit:(NSString *)exit {
     
-    [self removeFenceAnnotation:annotation];
+    [self.mapView removeAnnotation:annotation];
+    [self removeRadiusOverlayforFenceAnnotation:annotation];
+    [self stopMonitoringFence:annotation];
     
     //Check max radius
     NSNumber *maxRange = [NSNumber numberWithDouble:self.locationManager.maximumRegionMonitoringDistance];
@@ -240,7 +242,8 @@
     [annotation editWithName:name Range:radius Lat:lat Lon:lon Entry:entry Exit:exit];
     
     // Add annotation to the mapview
-    [self addFenceAnnotation:annotation];
+    [self.mapView addAnnotation:annotation];
+    [self addRadiusOverlayForFenceAnnotation:annotation];
     
     // Start monitoring
     [self startMonitoring:annotation];

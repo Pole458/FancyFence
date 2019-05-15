@@ -11,11 +11,16 @@
 @interface AppDelegate ()
 
 @property (nonatomic, strong) CLLocationManager *locationManager;
+@property (nonatomic) NSMutableArray *alerts;
 
 @end
 
 @implementation AppDelegate
 
+- (NSMutableArray *)alerts {
+    if(!_alerts) _alerts = [[NSMutableArray alloc] init];
+    return _alerts;
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
@@ -79,13 +84,11 @@
     NSString *name = [fence valueForKey:@"name"];
     NSString *entry = [fence valueForKey:@"entry"];
     
-    if (fence)
+    if (fence) {
         NSLog(@"Notify!: %@, %@", name, entry);
-    else
+        [self notifyFenceWithName:name Message:entry];
+    } else
         NSLog(@"Could not find ragion with id: %@", region.identifier);
-    
-    [self notifyFenceWithName:name Message:entry];
-
 }
 
 - (void)locationManager:(CLLocationManager *)manager didExitRegion:(CLRegion *)region {
@@ -95,28 +98,34 @@
     NSString *name = [fence valueForKey:@"name"];
     NSString *exit = [fence valueForKey:@"exit"];
     
-    if (fence)
+    if (fence) {
         NSLog(@"Notify!: %@, %@", name, exit);
-    else
+        [self notifyFenceWithName:name Message:exit];
+    } else
         NSLog(@"Could not find ragion with id %@", region.identifier);
-    
-    [self notifyFenceWithName:name Message:exit];
 }
 
 - (void)notifyFenceWithName:(NSString*)name Message:(NSString*)message {
     
     if(UIApplication.sharedApplication.applicationState == UIApplicationStateActive) {
-        
-        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Fancy Fence"
-                                                                       message:message
-                                                                preferredStyle:UIAlertControllerStyleAlert];
+
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:name message:message preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
-                                                              handler:^(UIAlertAction * action) {}];
+                                                              handler:^(UIAlertAction * action) {
+                                                                  [self.alerts removeObject:alert];
+                                                                  if(self.alerts.count > 0)
+                                                                      [self.window.rootViewController presentViewController:self.alerts[0] animated:YES completion:nil];
+                                                              }];
         [alert addAction:defaultAction];
-        [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
-    
+        
+        if(self.alerts.count == 0) {
+            [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
+        }
+        
+        [self.alerts addObject:alert];
+
     } else {
-        // Otherwise present a local notification
+//         Otherwise present a local notification
 
         UNMutableNotificationContent *notificationContent = [[UNMutableNotificationContent alloc] init];
         notificationContent.body = message;
